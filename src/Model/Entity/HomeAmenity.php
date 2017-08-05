@@ -4,22 +4,16 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * User Entity
+ * HomeAmenity Entity
  *
  * @property int $id
- * @property string $title
- * @property string $fname
- * @property int $mname
- * @property int $lname
- * @property int $username
- * @property int $email
- * @property string $passoword
- * @property \Cake\I18n\Time $created
- * @property \Cake\I18n\Time $modified
+ * @property int $home_id
+ * @property int $amenity_id
  *
- * @property \App\Model\Entity\Patient[] $patients
+ * @property \App\Model\Entity\Home $home
+ * @property \App\Model\Entity\Amenity $amenity
  */
-class User extends Entity
+class HomeAmenity extends Entity
 {
 
     /**

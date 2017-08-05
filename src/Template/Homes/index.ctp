@@ -9,7 +9,7 @@
                         <h2>Add Your Home</h2>
                     </div>
                     <!-- ========== BOOKING FORM ========== -->
-                    <?php echo $this->Form->create('', ['id' => 'booking_form_advanced', 'url' => ['controller' => 'homes', 'action' => 'addHomes']]); ?>
+                    <?php echo $this->Form->create('', ['id' => 'booking_form_advanced', 'url' => ['controller' => 'homes', 'action' => 'index']]); ?>
 
                     <div class="row">
 
@@ -28,7 +28,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Mobile</label>
-                                <?php echo $this->Form->control('mobile', ['class' => 'form-control', 'placeholder' => 'Landline Number']); ?>
+                                <?php echo $this->Form->control('mobile', ['class' => 'form-control', 'placeholder' => 'Mobile']); ?>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -40,13 +40,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Amenities</label>
-                                <?php echo $this->Form->input('amenities', ['options' => $amenities, 'multiple' => 'checkbox', 'label' => false]); ?>
+                                <?php echo $this->Form->input('home_amenities.amenity_id', ['options' => $amenities, 'multiple' => 'checkbox', 'label' => false]); ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Features</label>
-                                <?php echo $this->Form->input('features', ['options' => $features, 'multiple' => 'checkbox', 'label' => false]); ?>
+                                <?php echo $this->Form->input('home_features.feature_id', ['options' => $features, 'multiple' => 'checkbox', 'label' => false]); ?>
                             </div>
                         </div>
                         <div class="col-md-4">

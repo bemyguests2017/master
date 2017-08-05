@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $("#booking_form_advanced").validate({
+    $("#booking_form_advanced1").validate({
         rules: {
             name: "required",
             country_id: "required",

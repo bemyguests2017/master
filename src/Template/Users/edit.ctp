@@ -8,8 +8,6 @@
             )
         ?></li>
         <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Patients'), ['controller' => 'Patients', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Patient'), ['controller' => 'Patients', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="users form large-9 medium-8 columns content">
@@ -17,7 +15,13 @@
     <fieldset>
         <legend><?= __('Edit User') ?></legend>
         <?php
-            echo $this->Form->input('name');
+            echo $this->Form->input('title');
+            echo $this->Form->input('fname');
+            echo $this->Form->input('mname');
+            echo $this->Form->input('lname');
+            echo $this->Form->input('username');
+            echo $this->Form->input('email');
+            echo $this->Form->input('passoword');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

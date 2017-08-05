@@ -4,22 +4,21 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * User Entity
+ * UserProfile Entity
  *
  * @property int $id
- * @property string $title
- * @property string $fname
- * @property int $mname
- * @property int $lname
- * @property int $username
- * @property int $email
- * @property string $passoword
+ * @property int $guest_id
+ * @property int $phone
+ * @property string $gender
+ * @property string $marital_status
+ * @property string $profile_picture
+ * @property \Cake\I18n\Time $dob
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $modified
  *
- * @property \App\Model\Entity\Patient[] $patients
+ * @property \App\Model\Entity\Guest $guest
  */
-class User extends Entity
+class UserProfile extends Entity
 {
 
     /**

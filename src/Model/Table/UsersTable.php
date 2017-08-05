@@ -9,8 +9,6 @@ use Cake\Validation\Validator;
 /**
  * Users Model
  *
- * @property \Cake\ORM\Association\HasMany $Patients
- *
  * @method \App\Model\Entity\User get($primaryKey, $options = [])
  * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
@@ -18,6 +16,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\User patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\User[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\User findOrCreate($search, callable $callback = null)
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class UsersTable extends Table
 {
@@ -36,9 +36,7 @@ class UsersTable extends Table
         $this->displayField('name');
         $this->primaryKey('id');
 
-        $this->hasMany('Patients', [
-            'foreignKey' => 'user_id'
-        ]);
+        $this->addBehavior('Timestamp');
     }
 
     /**
@@ -54,9 +52,51 @@ class UsersTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->requirePresence('name', 'create')
-            ->notEmpty('name');
+            ->requirePresence('title', 'create')
+            ->notEmpty('title');
+
+        $validator
+            ->requirePresence('fname', 'create')
+            ->notEmpty('fname');
+
+        $validator
+            ->integer('mname')
+            ->allowEmpty('mname');
+
+        $validator
+            ->integer('lname')
+            ->requirePresence('lname', 'create')
+            ->notEmpty('lname');
+
+        $validator
+            ->integer('username')
+            ->requirePresence('username', 'create')
+            ->notEmpty('username');
+
+        $validator
+            ->email('email')
+            ->requirePresence('email', 'create')
+            ->notEmpty('email');
+
+        $validator
+            ->requirePresence('passoword', 'create')
+            ->notEmpty('passoword');
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->isUnique(['username']));
+        $rules->add($rules->isUnique(['email']));
+
+        return $rules;
     }
 }

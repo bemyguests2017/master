@@ -20,23 +20,31 @@ class HomesController extends AppController {
         $this->viewBuilder()->layout('default2');
         $countries = \Cake\ORM\TableRegistry::get('Countries')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
         $states = \Cake\ORM\TableRegistry::get('States')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
-        ;
         $cities = \Cake\ORM\TableRegistry::get('Cities')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
-        ;
         $amenities = \Cake\ORM\TableRegistry::get('Amenities')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
-        ;
         $features = \Cake\ORM\TableRegistry::get('Features')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
-        ;
         $cuisines = \Cake\ORM\TableRegistry::get('Cuisines')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
-        ;
-
-        $homes = "";
-        //$this->layout('main');
-//        $patients = $this->paginate($this->Patients);
-//
+        
         if ($this->request->is('post')) {
-            pr($this->request->data);
-            die;
+  
+           
+            $this->request->data = ["name" => "rafvi", "max_guests" => "1", "mobile" => "111111111111111", "landline"=>"11111111",
+                "home_amenities" => ["0" => ['amenity_id' => '1'], "1" => ['amenity_id' => '2'], "2" => ['amenity_id' => '3']],
+                "home_features" => ["0" => ['feature_id' => '1'], "1" => ['feature_id' => '2'], "2" => ['amenity_id' => '3']]];
+            
+            pr($this->request->data); die;
+            
+            $form = $this->Homes->newEntity();
+            $form = $this->Homes->patchEntity($form, $this->request->data);
+            
+        if ($this->Homes->save($form, ['associated'=> ['HomeAmenities', 'HomeFeatures']])) {
+                $this->Flash->success(__('The form has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            } else {
+                pr($form->errors()); die;
+                $this->Flash->error(__('The form could not be saved. Please, try again.'));
+            }
         }
         $this->set(compact('homes', 'states', 'countries', 'states', 'cities', 'amenities', 'features', 'cuisines'));
         $this->set('_serialize', ['homes']);
