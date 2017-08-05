@@ -19,9 +19,6 @@ class GuestsController extends AppController
     public function register()
     {
         $this->viewBuilder()->layout('default2');
-
-        $this->set(compact('guests'));
-        $this->set('_serialize', ['guests']);
     }
     
     /**
@@ -32,9 +29,6 @@ class GuestsController extends AppController
     public function login()
     {
         $this->viewBuilder()->layout('default2');
-
-        $this->set(compact('guests'));
-        $this->set('_serialize', ['guests']);
     }
     
     public function profile()
