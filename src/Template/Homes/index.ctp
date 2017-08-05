@@ -9,7 +9,7 @@
                         <h2>Add Your Home</h2>
                     </div>
                     <!-- ========== BOOKING FORM ========== -->
-                    <?php echo $this->Form->create('', ['id' => 'booking_form_advanced', 'url' => ['controller' => 'homes', 'action' => 'index']]); ?>
+                    <?php echo $this->Form->create($homes, ['id' => 'booking_form_advanced', 'method' => 'post', 'url' => ['controller' => 'homes', 'action' => 'index']]); ?>
 
                     <div class="row">
 
@@ -40,13 +40,19 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Amenities</label>
-                                <?php echo $this->Form->input('home_amenities.amenity_id', ['options' => $amenities, 'multiple' => 'checkbox', 'label' => false]); ?>
+                                <?php 
+                                    $amenity_ids = !empty($homes->amenity_ids) ? explode(',', $homes->amenity_ids) : "";
+                                    echo $this->Form->input('amenity_ids', ['options' => $amenities, 'multiple' => 'checkbox', 'label' => false, 'value' => $amenity_ids]); 
+                                ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Features</label>
-                                <?php echo $this->Form->input('home_features.feature_id', ['options' => $features, 'multiple' => 'checkbox', 'label' => false]); ?>
+                                <?php 
+                                    $feature_ids = !empty($homes->feature_ids) ? explode(',', $homes->feature_ids) : "";
+                                    echo $this->Form->input('feature_ids', ['options' => $features, 'multiple' => 'checkbox', 'label' => false, 'value' => $feature_ids]); 
+                                ?>
                             </div>
                         </div>
                         <div class="col-md-4">

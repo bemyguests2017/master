@@ -16,33 +16,35 @@ class HomesController extends AppController {
      *
      * @return \Cake\Network\Response|null
      */
-    public function index() {
+    public function index($homeId = null) {
+        $homes = null;
         $this->viewBuilder()->layout('default2');
-        $countries = \Cake\ORM\TableRegistry::get('Countries')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
-        $states = \Cake\ORM\TableRegistry::get('States')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
-        $cities = \Cake\ORM\TableRegistry::get('Cities')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
+//        $countries = \Cake\ORM\TableRegistry::get('Countries')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
+//        $states = \Cake\ORM\TableRegistry::get('States')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
+//        $cities = \Cake\ORM\TableRegistry::get('Cities')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
         $amenities = \Cake\ORM\TableRegistry::get('Amenities')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
         $features = \Cake\ORM\TableRegistry::get('Features')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
         $cuisines = \Cake\ORM\TableRegistry::get('Cuisines')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
         
-        if ($this->request->is('post')) {
-  
-           
-            $this->request->data = ["name" => "rafvi", "max_guests" => "1", "mobile" => "111111111111111", "landline"=>"11111111",
-                "home_amenities" => ["0" => ['amenity_id' => '1'], "1" => ['amenity_id' => '2'], "2" => ['amenity_id' => '3']],
-                "home_features" => ["0" => ['feature_id' => '1'], "1" => ['feature_id' => '2'], "2" => ['amenity_id' => '3']]];
+        $homes = $this->Homes->newEntity();
+        if($homeId){
+            $homes = $this->Homes->get($homeId);
+        }
             
-            pr($this->request->data); die;
-            
-            $form = $this->Homes->newEntity();
-            $form = $this->Homes->patchEntity($form, $this->request->data);
-            
-        if ($this->Homes->save($form, ['associated'=> ['HomeAmenities', 'HomeFeatures']])) {
-                $this->Flash->success(__('The form has been saved.'));
+        if ($this->request->is(['POST', 'PUT'])) {
+                
+            $this->HomeAmenities = \Cake\ORM\TableRegistry::get('HomeAmenities');
+            $this->HomeFeatures = \Cake\ORM\TableRegistry::get('HomeFeatures');
 
-                return $this->redirect(['action' => 'index']);
+            $this->request->data['amenity_ids'] = count($this->request->data['amenity_ids']) ? implode(',', $this->request->data['amenity_ids']) : ""; 
+            $this->request->data['feature_ids'] = count($this->request->data['feature_ids']) ? implode(',', $this->request->data['feature_ids']) : ""; 
+            
+            $homes = $this->Homes->patchEntity($homes, $this->request->data);
+            
+            if ($homeDetails = $this->Homes->save($homes)) {
+                $this->Flash->success(__('The form has been saved.'));
+                $this->redirect(['action' => 'index', $homeDetails->id]);
             } else {
-                pr($form->errors()); die;
                 $this->Flash->error(__('The form could not be saved. Please, try again.'));
             }
         }
@@ -50,27 +52,29 @@ class HomesController extends AppController {
         $this->set('_serialize', ['homes']);
     }
 
-    public function addHomes() {
-        $response = [];
-        if ($this->request->is('post')) {
-           
-            $form = $this->Homes->newEntity();
-            //$form = $this->Homes->patchEntity($form, $this->request->data, ['associated' => ['Amenities', 'Features']]);
-            $form = $this->Homes->patchEntity($form, $this->request->data);
-            
-            if(!empty($form->errors())){
-                $errors = $this->check($form->errors());
-                $response = ['type' => 'error', 'errors' => $errors];
-            } else {
-                if ($this->Homes->save($form)) {
-                    $response = ['type' => 'success', 'text' => 'record inserted successfully'];
-                } else {
-                    $response = ['type' => 'error', 'text' => 'record not inserted successfully'];
-                }
-            }
+    public function addHomesLocation($homeId= null) {
+        $location = "";
+        $this->viewBuilder()->layout('default2');
+        $homes = $this->Homes->newEntity();
+        
+        if($homeId){
+            $homes = $this->Homes->get($homeId);
         }
-        $this->set(compact('response'));
-        $this->set('_serialize', ['response']);
+        
+        if ($this->request->is('post')) {
+
+            $homes = $this->Homes->newEntity();
+            $homes = $this->Homes->patchEntity($homes, $this->request->data);
+            if($this->Homes->save($homes)){
+                $this->Flash->success(__('The form has been saved.'));
+                $this->redirect(['action' => 'addHomesLocation']);
+            } else {
+                $this->Flash->error(__('The form could not be saved. Please, try again.'));
+            }
+            
+        }
+        $this->set(compact('location'));
+        $this->set('_serialize', ['location']);
     }
 
     /**
@@ -157,13 +161,14 @@ class HomesController extends AppController {
 
         return $this->redirect(['action' => 'index']);
     }
- 
+
     function check($array) {
-        foreach ($array as $key => $error){
-            foreach ($error as $msg){
+        foreach ($array as $key => $error) {
+            foreach ($error as $msg) {
                 $newArr[$key][] = $msg;
-           }
+            }
         }
         return $newArr;
     }
+
 }

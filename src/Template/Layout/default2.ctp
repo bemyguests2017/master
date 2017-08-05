@@ -32,6 +32,19 @@
     
     <!-- ========== GOOGLE FONTS ========== -->
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900%7cRaleway:400,500,600,700" rel="stylesheet">
+    
+    
+    <!-- ========== JAVASCRIPT ========== -->
+    <?= $this->Html->script('jquery.min.js'); ?>
+    <?= $this->Html->script('jquery.validate.js'); ?>
+    <?= $this->Html->script('form.validate.js'); ?>
+    <?= $this->Html->script('bootstrap.min.js'); ?>
+    <?= $this->Html->script('bootstrap-select.min.js'); ?>
+    <?= $this->Html->script('jquery.smoothState.js'); ?>
+    <?= $this->Html->script('morphext.min.js'); ?>
+    <?= $this->Html->script('wow.min.js'); ?>
+    <?= $this->Html->script('jPushMenu.js'); ?>
+    <?= $this->Html->script('main.js'); ?>
 </head>
 
 <body>
@@ -51,17 +64,6 @@
     <!-- ========== NOTIFICATION ========== -->
     <div id="notification"></div>
      
-    <!-- ========== JAVASCRIPT ========== -->
-    <?= $this->Html->script('jquery.min.js'); ?>
-    <?= $this->Html->script('jquery.validate.js'); ?>
-    <?= $this->Html->script('form.validate.js'); ?>
-    <?= $this->Html->script('bootstrap.min.js'); ?>
-    <?= $this->Html->script('bootstrap-select.min.js'); ?>
-    <?= $this->Html->script('jquery.smoothState.js'); ?>
-    <?= $this->Html->script('morphext.min.js'); ?>
-    <?= $this->Html->script('wow.min.js'); ?>
-    <?= $this->Html->script('jPushMenu.js'); ?>
-    <?= $this->Html->script('main.js'); ?>
     
 
 </body>
