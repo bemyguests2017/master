@@ -22,6 +22,7 @@ class GuestsController extends AppController
 
         $this->set(compact('guests'));
         $this->set('_serialize', ['guests']);
+		// pr($this->request->data);die;
     }
     
     /**

@@ -76,9 +76,9 @@
      
     <!-- ========== JAVASCRIPT ========== -->
     <?= $this->Html->script('jquery.min.js'); ?>
-    <?= $this->Html->script('jquery.validate.js'); ?>
-    <?= $this->Html->script('form.validate.js'); ?>
-    <?= $this->Html->script('http://maps.googleapis.com/maps/api/js?key=AIzaSyAMwlCs4nq-MpgGjRDKIWTWzrIJaLb_CEw&libraries=places'); ?>
+    <?php //$this->Html->script('jquery.validate.js'); ?>
+    <?php //$this->Html->script('form.validate.js'); ?>
+    <?php // $this->Html->script('http://maps.googleapis.com/maps/api/js?key=AIzaSyAMwlCs4nq-MpgGjRDKIWTWzrIJaLb_CEw&libraries=places'); ?>
     
     <?= $this->Html->script('bootstrap.min.js'); ?>
     <?= $this->Html->script('bootstrap-datepicker.min.js'); ?>
