@@ -1,27 +1,95 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
+use Cake\Routing\Router;
+use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
+use Cake\Utility\Security;
+use Cake\Auth\DefaultPasswordHasher;
+use Cake\Mailer\MailerAwareTrait;
 
 /**
  * Users Controller
  *
  * @property \App\Model\Table\UsersTable $Users
  */
-class UsersController extends AppController
-{
+class UsersController extends AppController {
+
+    use MailerAwareTrait;
+
+    public $Users;
+
+    public function initialize() {
+        parent::initialize();
+        $this->Users = TableRegistry::get('Users');
+    }
+
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+        // Allow users to register and logout.
+        // You should not add the "login" action to allow list. Doing so would
+        // cause problems with normal functioning of AuthComponent.
+        $this->Auth->allow(['register', 'logout', 'login']);
+    }
 
     /**
-     * Index method
+     * register method
      *
      * @return \Cake\Network\Response|null
      */
-    public function index()
-    {
-        $users = $this->paginate($this->Users);
+    public function register() {
+        $this->viewBuilder()->layout('default2');
+        $user = $this->Users->newEntity();
+        if (!($this->Auth->user('id'))) {
+            if ($this->request->is('post')) {
+                $user = $this->Users->patchEntity($user, $this->request->data);
+                if (empty($user->errors())) {
+                    if ($this->Users->save($user)) {
+                        $this->Flash->success(__('You have registed successfully.'));
+                        $this->redirect('/login');
+                    } else {
+                        $this->Flash->error(__('erro'));
+                    }
+                }
+            }
+        }else{
+            return $this->redirect("/homes/index");
+        }
+        $this->set(compact('user'));
+        $this->set('_serialize', ['user']);
+    }
 
-        $this->set(compact('users'));
-        $this->set('_serialize', ['users']);
+    function login() {
+        $this->viewBuilder()->layout('default2');
+        $user = $this->Users->newEntity();
+        if (!($this->Auth->user('id'))) {
+            if ($this->request->is('post')) {
+                $user = $this->Users->newEntity($this->request->data, ['validate' => 'Login']);
+                if (empty($user->errors())) {
+                    $user = $this->Auth->identify();
+                    if ($user) {
+                        $this->Auth->setUser($user);
+                        return $this->redirect('/homes/index');
+                    } else {
+                        $this->Flash->error(__("Error"));
+                        return $this->redirect('/login');
+                    }
+                } else {
+                    $user->errors($user->errors());
+                }
+            }
+        } else {
+            return $this->redirect("/homes/index");
+        }
+        $this->set(compact('user'));
+        $this->set('_serialize', ['user']);
+    }
+    public function logout(){
+        $this->Auth->logout();
+        return $this->redirect("/users/login");
     }
 
     /**
@@ -31,8 +99,7 @@ class UsersController extends AppController
      * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
+    public function view($id = null) {
         $user = $this->Users->get($id, [
             'contain' => ['Patients']
         ]);
@@ -46,8 +113,7 @@ class UsersController extends AppController
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
+    public function add() {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->data);
@@ -70,8 +136,7 @@ class UsersController extends AppController
      * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit($id = null)
-    {
+    public function edit($id = null) {
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
@@ -96,8 +161,7 @@ class UsersController extends AppController
      * @return \Cake\Network\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
-    {
+    public function delete($id = null) {
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
@@ -108,4 +172,5 @@ class UsersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
 }

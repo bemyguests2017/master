@@ -5,7 +5,15 @@
         </div>
         <ul class="top_menu_right">
             <li><i class="fa fa-phone"></i><a href="tel:18475555555"> 1-888-123-4567 </a></li>
-            <li class="email hidden-xxs"><i class="fa fa-envelope-o "></i> <a href="mailto:contact@site.com">contact@site.com</a></li>
+            <li class="email hidden-xxs"><i class="fa fa-envelope-o "></i>
+            <?php if($this->request->session()->read('Auth.User.id') == ''){
+                echo $this->Html->link("Login","/users/login",['class' => '', 'escape' => false]);?>
+                <i class="fa fa-envelope-o "></i><?php 
+                echo $this->Html->link("Register","/users/register",['class' => '', 'escape' => false]);
+            }else{
+                echo $this->Html->link("Logout","/users/logout",['class' => '', 'escape' => false]);
+            } ?>
+            </li>
             <li class="language-switcher">
                 <nav class="dropdown">
                     <a href="#" class="dropdown-toggle select" data-hover="dropdown" data-toggle="dropdown">
