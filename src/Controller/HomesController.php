@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
 /**
  * Forms Controller
@@ -16,6 +17,13 @@ class HomesController extends AppController {
      *
      * @return \Cake\Network\Response|null
      */
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+        // Allow users to register and logout.
+        // You should not add the "login" action to allow list. Doing so would
+        // cause problems with normal functioning of AuthComponent.
+        $this->Auth->allow(['index']);
+    }
     public function index() {
         $this->viewBuilder()->layout('default2');
         $countries = \Cake\ORM\TableRegistry::get('Countries')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();

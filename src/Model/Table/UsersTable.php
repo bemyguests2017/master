@@ -2,9 +2,15 @@
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
+use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Rule\IsUnique;
+use App\ORM\Rule\IsUniqueWithNulls;
+use App\Model\Validation;
+use Cake\ORM\TableRegistry;
+
 
 /**
  * Users Model
@@ -52,24 +58,6 @@ class UsersTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->requirePresence('title', 'create')
-            ->notEmpty('title');
-
-        $validator
-            ->requirePresence('fname', 'create')
-            ->notEmpty('fname');
-
-        $validator
-            ->integer('mname')
-            ->allowEmpty('mname');
-
-        $validator
-            ->integer('lname')
-            ->requirePresence('lname', 'create')
-            ->notEmpty('lname');
-
-        $validator
-            ->integer('username')
             ->requirePresence('username', 'create')
             ->notEmpty('username');
 
@@ -79,9 +67,18 @@ class UsersTable extends Table
             ->notEmpty('email');
 
         $validator
-            ->requirePresence('passoword', 'create')
-            ->notEmpty('passoword');
+            ->requirePresence('password', 'create')
+            ->notEmpty('password');
 
+        return $validator;
+    }
+    
+    public function validationLogin(Validator $validator) {
+        $validator
+                ->requirePresence('password')
+                ->notEmpty('password', 'This field is required.')
+                ->requirePresence('username')
+                ->notEmpty('username','This field is required.');
         return $validator;
     }
 

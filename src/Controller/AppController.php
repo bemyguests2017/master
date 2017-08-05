@@ -16,6 +16,10 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\Utility\Security;
+use Cake\View\Helper\Number;
+use Cake\Routing\Router;
+
 
 /**
  * Application Controller
@@ -39,9 +43,22 @@ class AppController extends Controller
     public function initialize()
     {
         parent::initialize();
-
+        
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+		
+        $this->loadComponent('Auth', [
+            'loginAction' => '/login',
+            'logoutRedirect' => '/login',
+            'authError' => 'You are not autherized to Access this page!',
+            'authenticate' => [
+                'Form' => [
+                    'fields' => ['username' => 'username']
+                ]
+            ],
+            'storage' => 'Session',
+            'authorize' => 'Controller',
+        ]);
     }
 
     /**
