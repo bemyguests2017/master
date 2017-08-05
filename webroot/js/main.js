@@ -722,7 +722,7 @@
         }
 
         /*========== BOOKING FORM ==========*/
-        $("form").on('submit', function (e) {
+        $("#form").on('submit', function (e) {
             e.preventDefault();
             //Data to be sent to server
             var post_data;

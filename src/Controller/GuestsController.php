@@ -19,6 +19,7 @@ class GuestsController extends AppController
     public function register()
     {
         $this->viewBuilder()->layout('default2');
+
     }
     
     /**

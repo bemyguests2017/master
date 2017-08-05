@@ -4,10 +4,9 @@
 
             <div class="row">
                 <div class="col-md-4">
-
                 </div>
                 <div class="col-md-4">
-                    <?php echo $this->Form->create('', ['id' => 'guest_login__form', 'url' => ['controller' => 'guests', 'action' => 'login']]); ?>
+                    <?php echo $this->Form->create('Guest', ['url' => ['controller' => 'guests', 'action' => 'register']]); ?>
                     <div class="form-group">
                         <label>Username</label>
                         <?php echo $this->Form->control('username', ['class' => 'form-control', 'placeholder' => 'Your Home Name']); ?>
@@ -28,8 +27,5 @@
                 </div>
             </div>
         </div>
-
-
-
     </div>
 </main>

@@ -14,8 +14,13 @@
     <!-- ========== FAVICON ========== -->
     
     
-    <link rel="apple-touch-icon-precomposed" href="img/favicon-apple.png" />
-    <link rel="icon" href="img/favicon.png">
+    
+    
+    <?= $this->Html->meta(
+    'favicon.png',
+    'favicon.png',
+    ['type' => 'icon']
+    ); ?>
         
     <!-- ========== STYLESHEETS ========== -->
     <?= $this->Html->css('bootstrap.min.css') ?>    
