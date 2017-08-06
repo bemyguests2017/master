@@ -48,12 +48,20 @@ class AppController extends Controller
         $this->loadComponent('Flash');
 		
         $this->loadComponent('Auth', [
-            'loginAction' => '/login',
-            'logoutRedirect' => '/login',
+            
+            'loginRedirect' => [
+                'controller' => 'Homes',
+                'action' => 'index'
+            ],
+            'logoutRedirect' => [
+                'controller' => 'Forms',
+                'action' => 'index'
+            ],
             'authError' => 'You are not autherized to Access this page!',
             'authenticate' => [
                 'Form' => [
-                    'fields' => ['username' => 'username']
+                    'fields' => ['username' => 'username', 'password' => 'password'], 
+                    'userModel' => 'Users'
                 ]
             ],
             'storage' => 'Session',
@@ -79,5 +87,9 @@ class AppController extends Controller
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
         $this->viewBuilder()->layout('default');
+    }
+    
+    public function isAuthorized($user) {
+        return;
     }
 }

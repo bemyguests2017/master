@@ -20,13 +20,12 @@ class UsersController extends AppController {
 
     use MailerAwareTrait;
 
-    public $Users;
-
     public function initialize() {
         parent::initialize();
         $this->Users = TableRegistry::get('Users');
     }
-
+    
+    
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
         // Allow users to register and logout.
@@ -34,7 +33,7 @@ class UsersController extends AppController {
         // cause problems with normal functioning of AuthComponent.
         $this->Auth->allow(['register', 'logout', 'login']);
     }
-
+    
     /**
      * register method
      *
@@ -43,26 +42,31 @@ class UsersController extends AppController {
     public function register() {
         $this->viewBuilder()->layout('default2');
         $user = $this->Users->newEntity();
-        if (!($this->Auth->user('id'))) {
-            if ($this->request->is('post')) {
-                $user = $this->Users->patchEntity($user, $this->request->data);
-                if (empty($user->errors())) {
-                    if ($this->Users->save($user)) {
-                        $this->Flash->success(__('You have registed successfully.'));
-                        $this->redirect('/login');
-                    } else {
-                        $this->Flash->error(__('erro'));
-                    }
+
+        if ($this->Auth->user('id')) {
+            return $this->redirect(['controller' => 'Homes', 'action' => 'index']);
+        }
+
+
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, $this->request->data);
+            if (empty($user->errors())) {
+                if ($user = $this->Users->save($user)) {
+                    $this->Auth->setUser($user);
+                    $this->Flash->success(__('You have registed successfully.'));
+                    $this->redirect(['controller' => 'Homes', 'action' => 'index']);
+                } else {
+                    $this->Flash->error(__('erro'));
                 }
             }
-        }else{
-            return $this->redirect("/homes/index");
         }
+
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
-
-    function login() {
+    
+    
+    /*function login() {
         $this->viewBuilder()->layout('default2');
         $user = $this->Users->newEntity();
         if (!($this->Auth->user('id'))) {
@@ -70,26 +74,48 @@ class UsersController extends AppController {
                 $user = $this->Users->newEntity($this->request->data, ['validate' => 'Login']);
                 if (empty($user->errors())) {
                     $user = $this->Auth->identify();
+                    var_dump($user); die;
                     if ($user) {
                         $this->Auth->setUser($user);
-                        return $this->redirect('/homes/index');
+                        return $this->redirect(['controller' => 'Homes', 'action' => 'index']);
                     } else {
                         $this->Flash->error(__("Error"));
-                        return $this->redirect('/login');
+                        return $this->redirect(['controller' => 'Users', 'action' => 'login']);
                     }
                 } else {
                     $user->errors($user->errors());
                 }
             }
         } else {
-            return $this->redirect("/homes/index");
+            return $this->redirect(['controller' => 'Homes', 'action' => 'index']);
         }
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
+    }*/
+    
+    function login() {
+        $this->viewBuilder()->layout('default2');
+        if ($this->Auth->user('id')) {
+            return $this->redirect(['controller' => 'Homes', 'action' => 'index']);
+        }
+
+        if ($this->request->is('post')) {
+            if ($this->Auth->identify()) {                
+                return $this->redirect(['controller' => 'Homes', 'action' => 'index']);
+            } else {
+                $this->Flash->error(__("Error"));
+                return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+            }
+        }
+
+        $this->set(compact('user'));
+        $this->set('_serialize', ['user']);
     }
-    public function logout(){
+
+    public function logout() {
         $this->Auth->logout();
-        return $this->redirect("/users/login");
+        $this->Flash->error(__("Error"));
+        return $this->redirect(['controller' => 'Users', 'action' => 'login']);
     }
 
     /**

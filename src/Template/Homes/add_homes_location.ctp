@@ -9,44 +9,59 @@
                         <h2>Add Your Home Location</h2>
                     </div>
                     <!-- ========== BOOKING FORM ========== -->
-                    <?php echo $this->Form->create($location, ['id' => 'add_homes_location', 'method' => 'post', 'url' => ['controller' => 'homes', 'action' => 'addHomesLocation']]); ?>
+                    <?php echo $this->Form->create($homes, ['id' => 'add_homes_location', 'method' => 'post', 'url' => ['controller' => 'homes', 'action' => 'addHomesLocation']]); ?>
 
                     <div class="row">
 
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Country</label>
-                                <?php echo $this->Form->control('country', ['class' => 'form-control', 'placeholder' => 'Country Name', 'id' => 'country']); ?>
+                                <label>Address</label>
+                                <?php echo $this->Form->control('address',['class' => 'form-control', 'placeholder' => 'Address']); ?>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>State</label>
-                                <?php echo $this->Form->control('state', ['class' => 'form-control', 'placeholder' => 'State Name']); ?>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>City</label>
-                                <?php echo $this->Form->control('city', ['class' => 'form-control', 'placeholder' => 'City Name']); ?>
-                            </div>
-                        </div>
+                        
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Pincode</label>
                                 <?php echo $this->Form->control('pincode', ['class' => 'form-control', 'placeholder' => 'Pincode']); ?>
                             </div>
                         </div>
+                        
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Country</label>
+                                <?php echo $this->Form->select('country_id', $countries, ['class' => 'form-control']); ?>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>State</label>
+                                <?php echo $this->Form->select('state_id', $states, ['class' => 'form-control']); ?>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>City</label>
+                                <?php echo $this->Form->select('city_id', $cities, ['class' => 'form-control']); ?>
+                            </div>
+                        </div>
+                        
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Latitude</label>
-                                <?php echo $this->Form->control('lat', ['class' => 'form-control', 'placeholder' => 'Latitude', 'id' => 'lat']); ?>
+                                <?php echo $this->Form->control('lat', ['class' => 'form-control', 'placeholder' => 'Latitude', 'id' => 'lat', 'readonly']); ?>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Longitude</label>
-                                <?php echo $this->Form->control('lon', ['class' => 'form-control', 'placeholder' => 'Longitude', 'id' => 'long']); ?>
+                                <?php echo $this->Form->control('lon', ['class' => 'form-control', 'placeholder' => 'Longitude', 'id' => 'long', 'readonly']); ?>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Google Address</label>
+                                <?php echo $this->Form->control('google_formatted_address',['id' => 'google-formatted-address', 'class' => 'form-control', 'placeholder' => 'Google Address', 'readonly']); ?>
                             </div>
                         </div>
                         

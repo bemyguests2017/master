@@ -60,10 +60,7 @@ function initialize() {
             success: function (result) {
                 console.log(result);
                 //alert(result.results.formatted_address);
-                $("#country").val(result.results[8].formatted_address);
-                $("#pincode").val(result.results[6].formatted_address);
-                $("#city").val(result.results[6].formatted_address);
-                $("#state").val(result.results[6].formatted_address);
+                $("#google-formatted-address").val(result.results[0].formatted_address);
             }
         });
     }

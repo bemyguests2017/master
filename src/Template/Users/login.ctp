@@ -7,7 +7,7 @@
 
             </div>
             <div class="col-md-4">
-                <?= $this->Form->create($user,['novalidate' =>'novalidate','id'=>'loginFormValidate','autocomplete'=>'off']); ?>
+                <?= $this->Form->create("", ['novalidate' =>'novalidate','id'=>'loginFormValidate','autocomplete'=>'off']); ?>
                 <div class="form-group">
                     <label>Username</label>
                     <?php echo $this->Form->control('username', ['class' => 'form-control', 'placeholder' => 'Username']); ?>

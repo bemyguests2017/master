@@ -55,13 +55,16 @@
                                 ?>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <a href="javascript:void(0)" id="modal-open-location" class="button btn_blue bb"><i class="fa fa-user-o"></i>Add Location</a>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <a href="javascript:void(0)" id="modal-open-members" class="button btn_blue bb"><i class="fa fa-user-o"></i>Add Members</a>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <a href="javascript:void(0)" id="modal-open-cuisines" class="button btn_blue bb"><i class="fa fa-user-o"></i>Add Photos</a>
+                        </div>
+                        <div class="col-md-3">
                             <a href="javascript:void(0)" id="modal-open-cuisines" class="button btn_blue bb"><i class="fa fa-user-o"></i>Add Cuisines</a>
                         </div>
 
