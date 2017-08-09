@@ -24,7 +24,7 @@ class HomesController extends AppController {
         // Allow users to register and logout.
         // You should not add the "login" action to allow list. Doing so would
         // cause problems with normal functioning of AuthComponent.
-        $this->Auth->allow(['index', 'addHomesLocation', 'addHomesPhotos', 'uploadImages', 'addHomeMembers']);
+        $this->Auth->allow(['index', 'addHomesLocation', 'addHomesPhotos', 'uploadImages', 'addHomeMembers', 'addHomeCuisines']);
     }
 
     public function index($homeId = 38) {
@@ -142,7 +142,10 @@ class HomesController extends AppController {
         $members = "";
         $this->viewBuilder()->layout('default2');
         $homeId = '38';
+        $userId = $this->Auth->user('id') ? $this->Auth->user('id') : 38;
         $this->HomeMembers = \Cake\ORM\TableRegistry::get('HomeMembers');
+        
+        $pathImage = '/' . 'userFiles' . '/' . $userId . '/' . 'members';
         
         $member = $this->HomeMembers->newEntity();
         if ($memberId) {
@@ -156,7 +159,8 @@ class HomesController extends AppController {
 
         if ($this->request->is(['post', 'put'])) {
             $this->request->data['home_id'] = $homeId;
-            //pr($this->request->data); die;
+            $this->request->data['profile_picture'] = $this->uploadImageGeneric($this->request->data['photo'], 'members');
+            
             $homeMembers = $this->HomeMembers->patchEntity($member, $this->request->data);
                 
             if ($this->HomeMembers->save($homeMembers)) {
@@ -166,42 +170,41 @@ class HomesController extends AppController {
                 $this->Flash->error(__('The form could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('member', 'members','countries', 'states', 'cities'));
+        $this->set(compact('member', 'members', 'pathImage'));
         $this->set('_serialize', ['member']);
     }
     
     
-    public function addHomeCuisines($memberId = null) {
-        $member = "";
-        $members = "";
+    public function addHomeCuisines($cuisineId = null) {
         $this->viewBuilder()->layout('default2');
         $homeId = '38';
-        $this->HomeMembers = \Cake\ORM\TableRegistry::get('HomeMembers');
         
-        $member = $this->HomeMembers->newEntity();
-        if ($memberId) {
-            $member = $this->HomeMembers->get($memberId);
+        $this->HomeCuisines = \Cake\ORM\TableRegistry::get('HomeCuisines');
+        $this->CuisineCategories = \Cake\ORM\TableRegistry::get('CuisineCategories');
+        $categoryList = $this->CuisineCategories->find('list');
+        $allCuisines = $this->HomeCuisines->find('all')->contain(['CuisineCategories']);
+        
+        
+        $cuisine = $this->HomeCuisines->newEntity();
+        if ($cuisineId) {
+            $cuisine = $this->HomeCuisines->get($cuisineId);
         }
-        
-        if ($homeId) {
-            $members = $this->HomeMembers->find('all')->where(['home_id' => $homeId]);
-        }
-        
 
         if ($this->request->is(['post', 'put'])) {
+            
             $this->request->data['home_id'] = $homeId;
-            //pr($this->request->data); die;
-            $homeMembers = $this->HomeMembers->patchEntity($member, $this->request->data);
+            
+            $homeCuisines = $this->HomeCuisines->patchEntity($cuisine, $this->request->data);
                 
-            if ($this->HomeMembers->save($homeMembers)) {
+            if ($this->HomeCuisines->save($homeCuisines)) {
                 $this->Flash->success(__('The form has been saved.'));
-                $this->redirect(['action' => 'addHomeMembers']);
+                $this->redirect(['action' => 'addHomeCuisines']);
             } else {
                 $this->Flash->error(__('The form could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('member', 'members','countries', 'states', 'cities'));
-        $this->set('_serialize', ['member']);
+        $this->set(compact('categoryList', 'allCuisines', 'cuisine'));
+        $this->set('_serialize', ['cuisine']);
     }
     
     /**

@@ -40,7 +40,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Picture</label>
-                                <?php echo $this->Form->control('profile_picture', ['type' => 'file', 'class' => 'form-control', 'placeholder' => 'Profile Picture']); ?>
+                                <?php echo $this->Form->control('photo', ['type' => 'file', 'class' => 'form-control', 'placeholder' => 'Profile Picture']); ?>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -55,22 +55,22 @@
                     <div class="col-md-12">
                         <table>
                             <?php foreach ($members as $member) { ?>
-                            <tr>
-                                <?php
-//                            echo $this->Html->image($pathImage.'/'.$member->profile_picture, [
-//                                "alt" => "Brownies",
-//                                'url' => ['controller' => 'Recipes', 'action' => 'view', 6],
-//                                'width' => 100,
-//                                'height' => 100
-//                            ]);
+                                <tr>
 
-                                echo "<td>".$member->title."</td>";
-                                echo "<td>".$member->name."</td>";
-                                echo "<td>".$member->education."</td>";
-                                echo "<td>".$member->age."</td>";
-                                echo "<td>".$this->Html->link('Edit', '/homes/addHomeMembers/'.$member->id ,[])."</td>";
-                                ?>
-                              </tr>
+                                    <?php
+                                    echo "<td>" . $this->Html->image($pathImage . '/' . $member->profile_picture, [
+                                        'url' => ['controller' => 'Recipes', 'action' => 'view', 6],
+                                        'width' => 100,
+                                        'height' => 100
+                                    ]) . "</td>";
+
+                                    echo "<td>" . $member->title . "</td>";
+                                    echo "<td>" . $member->name . "</td>";
+                                    echo "<td>" . $member->education . "</td>";
+                                    echo "<td>" . $member->age . "</td>";
+                                    echo "<td>" . $this->Html->link('Edit', '/homes/addHomeMembers/' . $member->id, []) . "</td>";
+                                    ?>
+                                </tr>
 
                             <?php } ?>
                         </table>
