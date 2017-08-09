@@ -50,23 +50,34 @@ class AppController extends Controller {
         $this->loadComponent('Flash');
 
         $this->loadComponent('Auth', [
-            'loginRedirect' => [
-                'controller' => 'Homes',
-                'action' => 'index'
-            ],
-            'logoutRedirect' => [
-                'controller' => 'Forms',
-                'action' => 'index'
-            ],
-            'authError' => 'You are not autherized to Access this page!',
+            'authorize' => 'Controller',
             'authenticate' => [
                 'Form' => [
-                    'fields' => ['username' => 'username', 'password' => 'password'],
-                    'userModel' => 'Users'
+                    // fields used in login form
+                    'fields' => [
+                        'username' => 'username',
+                        'password' => 'password'
+                    ]
                 ]
             ],
-            'storage' => 'Session',
-            'authorize' => 'Controller',
+            // login Url
+            'loginAction' => [
+                'controller' => 'Users',
+                'action' => 'login'
+            ],
+            // where to be redirected after logout  
+            'logoutRedirect' => [
+                'controller' => 'Users',
+                'action' => 'login'//,
+            //'home'
+            ],
+            // if unauthorized user go to an unallowed action he will be redirected to this url
+            'unauthorizedRedirect' => [
+                'controller' => 'Users',
+                'action' => 'login'//,
+            //'home'
+            ],
+            'authError' => 'Did you really think you are allowed to see that?',
         ]);
     }
 
@@ -90,7 +101,7 @@ class AppController extends Controller {
     }
 
     public function isAuthorized($user) {
-        return;
+        return false;
     }
 
     public function uploadImageGeneric($image, $folderName) {

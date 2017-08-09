@@ -6,13 +6,16 @@
         <ul class="top_menu_right">
             <li><i class="fa fa-phone"></i><a href="tel:18475555555"> 1-888-123-4567 </a></li>
             <li class="email hidden-xxs"><i class="fa fa-envelope-o "></i>
-            <?php if($this->request->session()->read('Auth.User.id') == ''){
-                echo $this->Html->link("Login","/users/login",['class' => '', 'escape' => false]);?>
-                <i class="fa fa-envelope-o "></i><?php 
-                echo $this->Html->link("Register","/users/register",['class' => '', 'escape' => false]);
-            }else{
-                echo $this->Html->link("Logout","/users/logout",['class' => '', 'escape' => false]);
-            } ?>
+                <?php
+                if ($this->request->session()->read('Auth.User.id') == '') {
+                    echo $this->Html->link("Login", "/users/login", ['class' => '', 'escape' => false]);
+                    ?>
+                    <i class="fa fa-envelope-o "></i><?php
+                    echo $this->Html->link("Register", "/users/register", ['class' => '', 'escape' => false]);
+                } else {
+                    echo $this->Html->link("Logout", "/users/logout", ['class' => '', 'escape' => false]);
+                }
+                ?>
             </li>
             <li class="language-switcher">
                 <nav class="dropdown">
@@ -40,7 +43,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="index.html">
-                <?php echo $this->Html->image('logo.svg', ["alt" => "Logo", "height"=>"32"]); ?>
+                <?php echo $this->Html->image('logo.svg', ["alt" => "Logo", "height" => "32"]); ?>
             </a>
         </div>
         <nav id="main_menu" class="mobile_menu navbar-collapse">
@@ -49,11 +52,49 @@
                 <li class="dropdown simple_menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">HOME <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="index.html">Home Version 1</a></li>
-                        <li><a href="index2.html">Home Version 2</a></li>
-                        <li><a href="index3.html">Home Version 3</a></li>
-                        <li><a href="index4.html">Home Version 4</a></li>
-                        <li><a href="boxed.html">Boxed Layout</a></li>
+                        <li>
+                            <?php
+                            echo $this->Html->link(
+                                    'Home View', ['controller' => 'Homes', 'action' => 'homeView'], ['class' => '']
+                            );
+                            ?>
+                        </li>
+                        <li>
+                            <?php
+                            echo $this->Html->link(
+                                    'Add Home Details', ['controller' => 'Homes', 'action' => 'index'], ['class' => '']
+                            );
+                            ?>
+                        </li>
+                        <li>
+                            <?php
+                            echo $this->Html->link(
+                                    'Home Location', ['controller' => 'Homes', 'action' => 'addHomesLocation'], ['class' => '']
+                            );
+                            ?>
+                        </li>
+                        <li>
+                            <?php
+                            echo $this->Html->link(
+                                    'Home Photos', ['controller' => 'Homes', 'action' => 'addHomesPhotos'], ['class' => '']
+                            );
+                            ?>
+                        </li>
+                        <li>
+                            <?php
+                            echo $this->Html->link(
+                                    'Home Members', ['controller' => 'Homes', 'action' => 'addHomeMembers'], ['class' => '']
+                            );
+                            ?>
+                        </li>
+                        <li>
+                            <?php
+                            echo $this->Html->link(
+                                    'Home Cuisines', ['controller' => 'Homes', 'action' => 'addHomeCuisines'], ['class' => '']
+                            );
+                            ?>
+                        </li>
+                        
                     </ul>
                 </li>
                 <li class="dropdown simple_menu">

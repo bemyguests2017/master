@@ -6,82 +6,52 @@
                 <div id="booking_advanced">
 
                     <div class="main_title a_left upper">
-                        <h2>Add Your Home</h2>
+                        <h2>Update Profile</h2>
                     </div>
                     <!-- ========== BOOKING FORM ========== -->
-                    <?php echo $this->Form->create($homes, ['id' => 'booking_form_advanced', 'method' => 'post', 'url' => ['controller' => 'homes', 'action' => 'index']]); ?>
+                    <?php echo $this->Form->create($user, ['id' => 'booking_form_advanced', 'method' => 'post', 'url' => ['controller' => 'Users', 'action' => 'profile']]); ?>
 
                     <div class="row">
-
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Your Home Name</label>
-                                <?php echo $this->Form->control('name', ['class' => 'form-control', 'placeholder' => 'Your Home Name']); ?>
+                                <label>Title</label>
+                                <?php echo $this->Form->select('title', ['Mr.'=>'Mr.', 'Miss.'=>'Miss.', 'Mrs.'=>'Mrs.'], ['class' => 'form-control', 'placeholder' => 'Title']); ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Max Guests allowed</label>
-                                <?php echo $this->Form->select('max_guests', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], ['class' => 'form-control', 'placeholder' => 'Max Guests']); ?>
+                                <label>First Name</label>
+                                <?php echo $this->Form->control('fname', ['class' => 'form-control', 'placeholder' => 'First Name']); ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Mobile</label>
-                                <?php echo $this->Form->control('mobile', ['class' => 'form-control', 'placeholder' => 'Mobile']); ?>
+                                <label>Middle Name</label>
+                                <?php echo $this->Form->control('mname', ['class' => 'form-control', 'placeholder' => 'Middle Name']); ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Landline</label>
-                                <?php echo $this->Form->control('landline', ['class' => 'form-control', 'placeholder' => 'Landline Number']); ?>
+                                <label>Last Name</label>
+                                <?php echo $this->Form->control('lname', ['class' => 'form-control', 'placeholder' => 'Last Name']); ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Price per person</label>
-                                <?php echo $this->Form->control('price', ['class' => 'form-control', 'placeholder' => 'Price']); ?>
+                                <label>Username</label>
+                                <?php echo $this->Form->control('username', ['class' => 'form-control', 'placeholder' => 'Username', 'readonly']); ?>
                             </div>
                         </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <?php echo $this->Form->control('email', ['class' => 'form-control', 'placeholder' => 'Email', 'readonly']); ?>
+                            </div>
+                        </div>
+                        
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Description</label>
-                                <?php echo $this->Form->control('description', ['type' => 'textarea', 'class' => 'form-control', 'placeholder' => 'Description']); ?>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Amenities</label>
-                                <?php 
-                                    $amenity_ids = !empty($homes->amenity_ids) ? explode(',', $homes->amenity_ids) : "";
-                                    echo $this->Form->input('amenity_ids', ['options' => $amenities, 'multiple' => 'checkbox', 'label' => false, 'value' => $amenity_ids]); 
-                                ?>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Features</label>
-                                <?php 
-                                    $feature_ids = !empty($homes->feature_ids) ? explode(',', $homes->feature_ids) : "";
-                                    echo $this->Form->input('feature_ids', ['options' => $features, 'multiple' => 'checkbox', 'label' => false, 'value' => $feature_ids]); 
-                                ?>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="javascript:void(0)" id="modal-open-location" class="button btn_blue bb"><i class="fa fa-user-o"></i>Add Location</a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="javascript:void(0)" id="modal-open-members" class="button btn_blue bb"><i class="fa fa-user-o"></i>Add Members</a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="javascript:void(0)" id="modal-open-cuisines" class="button btn_blue bb"><i class="fa fa-user-o"></i>Add Photos</a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="javascript:void(0)" id="modal-open-cuisines" class="button btn_blue bb"><i class="fa fa-user-o"></i>Add Cuisines</a>
-                        </div>
-
-                        <div class="col-md-12">
-                            <button type="submit" class="button btn_blue pull-right"> <i class="fa fa-calendar-check-o" aria-hidden="true"></i> BOOK A ROOM NOW </button>
+                            <button type="submit" class="button btn_blue pull-right"> <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Update </button>
                         </div>
                     </div>
                     <?php echo $this->Form->end(); ?>

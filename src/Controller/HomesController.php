@@ -24,16 +24,40 @@ class HomesController extends AppController {
         // Allow users to register and logout.
         // You should not add the "login" action to allow list. Doing so would
         // cause problems with normal functioning of AuthComponent.
-        $this->Auth->allow(['index', 'addHomesLocation', 'addHomesPhotos', 'uploadImages', 'addHomeMembers', 'addHomeCuisines']);
+        //$this->Auth->allow(['index', 'addHomesLocation', 'addHomesPhotos', 'uploadImages', 'addHomeMembers', 'addHomeCuisines']);
     }
 
-    public function index($homeId = 38) {
+    public function isAuthorized($user) {
+        $action = $this->request->params['action'];
+        //  registered users can add topics and view index
+        if (in_array($action, ['index', 'addHomesLocation', 'addHomesPhotos', 'uploadImages', 'addHomeMembers', 'addHomeCuisines', 'homesList'])) {
+            return true;
+        }
+//         All other actions require an id or users cannot do it 
+//        if (empty($this->request->params['pass'][0])) {
+//            return false;
+//        }
+
+        // The owner of a topic can edit and delete it
+        // the owner of topic is known by its id and user_id value of topic .
+        /*if (in_array($this->request->action, ['edit', 'delete'])) {
+            // get topic id from the request 	
+            $topicId = (int) $this->request->params['pass'][0];
+            // check if the topic is owned by the user 
+            if ($this->Topics->isOwnedBy($topicId, $user['id'])) {
+                return true;
+            }
+        }*/
+        return parent::isAuthorized($user);
+    }
+
+    public function index() {
         $homes = null;
+        $homeId = $this->Auth->user('homeId');
         $this->viewBuilder()->layout('default2');
         $amenities = \Cake\ORM\TableRegistry::get('Amenities')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
         $features = \Cake\ORM\TableRegistry::get('Features')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
-        $cuisines = \Cake\ORM\TableRegistry::get('Cuisines')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
-
+                
         $homes = $this->Homes->newEntity();
         if ($homeId) {
             $homes = $this->Homes->get($homeId);
@@ -56,18 +80,18 @@ class HomesController extends AppController {
                 $this->Flash->error(__('The form could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('homes', 'states', 'countries', 'states', 'cities', 'amenities', 'features', 'cuisines'));
+        $this->set(compact('homes', 'states', 'countries', 'states', 'cities', 'amenities', 'features'));
         $this->set('_serialize', ['homes']);
     }
 
     public function addHomesLocation() {
         $location = "";
+        $homeId = $this->Auth->user('homeId');
         $this->viewBuilder()->layout('default2');
         $countries = \Cake\ORM\TableRegistry::get('Countries')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
         $states = \Cake\ORM\TableRegistry::get('States')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
         $cities = \Cake\ORM\TableRegistry::get('Cities')->find('list', ['keyField' => 'id', 'valueField' => 'name'])->toArray();
 
-        $homeId = '38';
         if ($homeId) {
             $homes = $this->Homes->get($homeId);
         }
@@ -90,13 +114,15 @@ class HomesController extends AppController {
     public function addHomesPhotos() {
         $this->HomeImages = \Cake\ORM\TableRegistry::get('HomeImages');
         $this->viewBuilder()->layout('default2');
-        $userId = $homeId = '38';
+        $userId = $this->Auth->user('id');
+        $homeId = $this->Auth->user('homeId');
+        
         $path = WWW_ROOT . DS . 'userFiles' . DS . $userId . DS . 'HomeImages';
         $pathImage = '/' . 'userFiles' . '/' . $userId . '/' . 'HomeImages';
         $homeImages = $this->HomeImages->find('all')->where(['home_id' => $homeId]);
         if ($this->request->is('post')) {
             $images = $this->uploadImages($this->request->data, $homeId);
-            
+
             $homes = $this->HomeImages->newEntities($images);
             if ($this->HomeImages->saveMany($homes)) {
                 $this->Flash->success(__('The form has been saved.'));
@@ -110,7 +136,7 @@ class HomesController extends AppController {
     }
 
     public function uploadImages($images, $homeId) {
-        $userId = $this->Auth->user('id') ? $this->Auth->user('id') : 38;
+        $userId = $this->Auth->user('id');
         $path = WWW_ROOT . DS . 'userFiles' . DS . $userId . DS . 'HomeImages';
         if (!file_exists($path)) {
             $dir = new Folder($path, true, 0755);
@@ -118,14 +144,14 @@ class HomesController extends AppController {
 
         foreach ($images['photo'] as $key => $image) {
             if (!empty($image['name'])) {
-               
+
                 $ext = substr(strtolower(strrchr($image['name'], '.')), 1); //get the extension
                 $arr_ext = array('jpg', 'jpeg', 'gif'); //set allowed extensions
                 //only process if the extension is valid
                 if (in_array($ext, $arr_ext)) {
                     //do the actual uploading of the file. First arg is the tmp name, second arg is
                     //where we are putting it
-                    move_uploaded_file($image['tmp_name'], $path .DS. $image['name']);
+                    move_uploaded_file($image['tmp_name'], $path . DS . $image['name']);
 
                     //prepare the filename for database entry
                     $saveImageData[$key]['home_id'] = $homeId;
@@ -133,36 +159,36 @@ class HomesController extends AppController {
                 }
             }
         }
-        
+
         return $saveImageData;
     }
-    
+
     public function addHomeMembers($memberId = null) {
         $member = "";
         $members = "";
         $this->viewBuilder()->layout('default2');
-        $homeId = '38';
-        $userId = $this->Auth->user('id') ? $this->Auth->user('id') : 38;
+        $homeId = $this->Auth->user('homeId');
+        $userId = $this->Auth->user('id');
         $this->HomeMembers = \Cake\ORM\TableRegistry::get('HomeMembers');
-        
+
         $pathImage = '/' . 'userFiles' . '/' . $userId . '/' . 'members';
-        
+
         $member = $this->HomeMembers->newEntity();
         if ($memberId) {
             $member = $this->HomeMembers->get($memberId);
         }
-        
+
         if ($homeId) {
             $members = $this->HomeMembers->find('all')->where(['home_id' => $homeId]);
         }
-        
+
 
         if ($this->request->is(['post', 'put'])) {
             $this->request->data['home_id'] = $homeId;
             $this->request->data['profile_picture'] = $this->uploadImageGeneric($this->request->data['photo'], 'members');
-            
+
             $homeMembers = $this->HomeMembers->patchEntity($member, $this->request->data);
-                
+
             if ($this->HomeMembers->save($homeMembers)) {
                 $this->Flash->success(__('The form has been saved.'));
                 $this->redirect(['action' => 'addHomeMembers']);
@@ -173,29 +199,28 @@ class HomesController extends AppController {
         $this->set(compact('member', 'members', 'pathImage'));
         $this->set('_serialize', ['member']);
     }
-    
-    
+
     public function addHomeCuisines($cuisineId = null) {
         $this->viewBuilder()->layout('default2');
-        $homeId = '38';
-        
+        $homeId = $this->Auth->user('homeId');
+
         $this->HomeCuisines = \Cake\ORM\TableRegistry::get('HomeCuisines');
         $this->CuisineCategories = \Cake\ORM\TableRegistry::get('CuisineCategories');
         $categoryList = $this->CuisineCategories->find('list');
         $allCuisines = $this->HomeCuisines->find('all')->contain(['CuisineCategories']);
-        
-        
+
+
         $cuisine = $this->HomeCuisines->newEntity();
         if ($cuisineId) {
             $cuisine = $this->HomeCuisines->get($cuisineId);
         }
 
         if ($this->request->is(['post', 'put'])) {
-            
+
             $this->request->data['home_id'] = $homeId;
-            
+
             $homeCuisines = $this->HomeCuisines->patchEntity($cuisine, $this->request->data);
-                
+
             if ($this->HomeCuisines->save($homeCuisines)) {
                 $this->Flash->success(__('The form has been saved.'));
                 $this->redirect(['action' => 'addHomeCuisines']);
@@ -206,7 +231,7 @@ class HomesController extends AppController {
         $this->set(compact('categoryList', 'allCuisines', 'cuisine'));
         $this->set('_serialize', ['cuisine']);
     }
-    
+
     /**
      * View method
      *
@@ -214,13 +239,17 @@ class HomesController extends AppController {
      * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null) {
-        $form = $this->Forms->get($id, [
-            'contain' => ['Elements']
-        ]);
-
-        $this->set('form', $form);
-        $this->set('_serialize', ['form']);
+    public function homesList() {
+        $this->viewBuilder()->layout('default2');
+        $homes = $this->Homes->find('all')
+                ->select(['name', 'max_guests', 'google_formatted_address', 'description', 'price', 'id'])
+                ->contain(['HomeImages' => ['fields' => ['image', 'home_id']]]);
+                
+        $userId = $this->Auth->user('id');
+        $pathImage = '/' . 'userFiles' . '/' . $userId . '/' . 'HomeImages';
+        
+        $this->set(compact('homes', 'pathImage'));
+        $this->set('_serialize', ['homes']);
     }
 
     /**

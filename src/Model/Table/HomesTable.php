@@ -51,8 +51,8 @@ class HomesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('HomeOwners', [
-            'foreignKey' => 'home_owner_id',
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
         $this->belongsTo('Countries', [
@@ -131,7 +131,7 @@ class HomesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['home_owner_id'], 'HomeOwners'));
+        $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['country_id'], 'Countries'));
         $rules->add($rules->existsIn(['state_id'], 'States'));
         $rules->add($rules->existsIn(['city_id'], 'Cities'));
